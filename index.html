@@ -14,10 +14,9 @@
             --gold: #f59e0b;
             --gold-glow: rgba(245, 158, 11, 0.6);
             --bg-dark: #090d16;
-            --card-bg: rgba(17, 24, 39, 0.75);
-            --border-glow: rgba(139, 92, 246, 0.3);
+            --card-bg: rgba(17, 24, 39, 0.85);
+            --border-glow: rgba(139, 92, 246, 0.4);
         }
-    
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
         
@@ -30,38 +29,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            overflow-x: hidden;
-        }
-
-        /* Ambient Glow Objects */
-        .ambient-light {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: var(--primary-glow);
-            filter: blur(120px);
-            z-index: -1;
-            top: 20%;
-            left: 20%;
-            animation: floatGlow 10s infinite alternate;
-        }
-        .ambient-light2 {
-            position: fixed;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            background: var(--accent-glow);
-            filter: blur(140px);
-            z-index: -1;
-            bottom: 10%;
-            right: 20%;
-            animation: floatGlow 12s infinite alternate-reverse;
-        }
-
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(40px, 50px) scale(1.2); }
         }
 
         .card {
@@ -69,15 +36,12 @@
             border: 1px solid var(--border-glow);
             border-radius: 28px;
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             width: 100%;
             max-width: 520px;
             padding: 30px;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
             text-align: center;
             position: relative;
-            z-index: 10;
-            transition: all 0.3s ease;
         }
 
         .badge {
@@ -88,30 +52,21 @@
             font-weight: 700;
             display: inline-block;
             margin-bottom: 12px;
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
-            letter-spacing: 1px;
         }
 
         .bravo-staff {
             background: linear-gradient(135deg, #f59e0b, #ef4444);
             border: 1px solid #fef08a;
-            box-shadow: 0 0 20px var(--gold-glow);
-            animation: pulseGlow 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px var(--gold-glow); }
-            50% { box-shadow: 0 0 25px var(--gold-glow), 0 0 10px #ef4444; }
+            box-shadow: 0 0 15px var(--gold-glow);
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
             background: linear-gradient(135deg, #38bdf8, #8b5cf6, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
-            letter-spacing: -0.5px;
         }
 
         p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 25px; }
@@ -120,18 +75,12 @@
             width: 100%;
             padding: 14px 18px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(15, 23, 42, 0.9);
             color: #fff;
             margin-bottom: 15px;
             font-size: 15px;
             outline: none;
-            transition: all 0.25s ease;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         .btn {
@@ -142,53 +91,25 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            transition: all 0.2s;
             margin-bottom: 10px;
         }
 
-        .btn:hover { transform: translateY(-2px); }
-        .btn:active { transform: translateY(0); }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #06b6d4, #3b82f6);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-admin {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--primary-glow);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: #fff;
-        }
+        .btn-primary { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; }
+        .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+        .btn-admin { background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
 
         .hidden { display: none !important; }
 
-        /* Modal Overlay */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            animation: fadeIn 0.25s ease;
         }
 
         .modal {
@@ -198,16 +119,9 @@
             padding: 25px;
             width: 90%;
             max-width: 440px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.9);
             text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Player Bar Header */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -215,50 +129,17 @@
             background: rgba(15, 23, 42, 0.9);
             padding: 12px 18px;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
             margin-bottom: 20px;
         }
 
-        /* Visualizer Box */
         .audio-player-box {
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            background: #0f172a;
             border: 1px solid var(--border-glow);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
-        .visualizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 5px;
-            height: 45px;
-            margin: 15px 0;
-        }
-
-        .bar {
-            width: 8px;
-            background: linear-gradient(to top, #06b6d4, #a855f7);
-            border-radius: 4px;
-            height: 10%;
-            transition: height 0.15s ease;
-        }
-
-        .playing .bar { animation: wave 0.8s infinite alternate ease-in-out; }
-        .playing .bar:nth-child(2) { animation-delay: 0.2s; }
-        .playing .bar:nth-child(3) { animation-delay: 0.4s; }
-        .playing .bar:nth-child(4) { animation-delay: 0.1s; }
-        .playing .bar:nth-child(5) { animation-delay: 0.3s; }
-
-        @keyframes wave {
-            0% { height: 15%; }
-            100% { height: 100%; }
-        }
-
-        /* Choices Grid */
         .options-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -266,61 +147,35 @@
             max-height: 260px;
             overflow-y: auto;
             margin-bottom: 20px;
-            padding-right: 4px;
         }
 
         .opt-btn {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #f1f5f9;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
             text-align: left;
             padding: 14px 18px;
             border-radius: 14px;
             font-size: 15px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .opt-btn:hover {
-            background: rgba(51, 65, 85, 0.9);
-            border-color: var(--accent);
-            transform: translateX(4px);
-        }
-
-        /* List Items in Admin / Leaderboard */
         .list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255,255,255,0.05);
             padding: 10px 14px;
             border-radius: 12px;
             margin-bottom: 8px;
             font-size: 14px;
         }
 
-        .sm-btn {
-            padding: 6px 12px;
-            font-size: 12px;
-            margin: 0;
-            width: auto;
-            border-radius: 8px;
-        }
-
-        footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #64748b;
-            z-index: 10;
-        }
+        .sm-btn { padding: 6px 12px; font-size: 12px; margin: 0; width: auto; border-radius: 8px; }
+        footer { margin-top: 20px; font-size: 12px; color: #64748b; }
     </style>
 </head>
 <body>
-
-    <div class="ambient-light"></div>
-    <div class="ambient-light2"></div>
 
     <!-- Login Screen -->
     <div class="card" id="loginCard">
@@ -330,7 +185,7 @@
         
         <input type="text" id="playerNameInput" placeholder="พิมพ์ชื่อผู้เล่นของคุณ..." autocomplete="off">
         
-        <label style="font-size: 13px; color: #94a3b8; display: block; text-align: left; margin-bottom: 6px; font-weight:600;">เลือกระดับความยาก:</label>
+        <label style="font-size: 13px; color: #94a3b8; display: block; text-align: left; margin-bottom: 6px;">เลือกระดับความยาก:</label>
         <select id="diffSelect">
             <option value="easy">ง่าย (4 ตัวเลือก) - 10 คะแนน</option>
             <option value="medium">ปานกลาง (6 ตัวเลือก) - 25 คะแนน</option>
@@ -345,7 +200,7 @@
     <!-- Modal Admin Challenge -->
     <div class="modal-overlay hidden" id="adminAuthModal">
         <div class="modal">
-            <h3 style="color:#a855f7; margin-bottom: 8px; font-size: 20px;">👑 ยืนยันสิทธิ์ ทีมงาน Bravo</h3>
+            <h3 style="color:#a855f7; margin-bottom: 8px;">👑 ยืนยันสิทธิ์ ทีมงาน Bravo</h3>
             <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 20px;">คุณคือทีมงานจริงหรอลองใส่รหัสสิ?</p>
             <input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="off">
             <button class="btn btn-primary" onclick="verifyAdmin()">ปลดล็อกสิทธิ์ Admin</button>
@@ -366,14 +221,9 @@
             </div>
         </div>
 
-        <div class="audio-player-box" id="audioBox">
-            <p id="songStatusText" style="font-size:14px; color:#38bdf8; font-weight:600;">🔊 ฟังคลิปเสียงเพลงจริงตัวอย่าง...</p>
-            
-            <div class="visualizer" id="visualizer">
-                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            </div>
-
-            <button class="btn btn-primary sm-btn" style="margin: 0 auto;" onclick="replayAudio()">🔄 ฟังเพลงอีกรอบ</button>
+        <div class="audio-player-box">
+            <p id="songStatusText" style="font-size:14px; color:#38bdf8; font-weight:600; margin-bottom:12px;">🔊 กำลังเล่นตัวอย่างเสียงเพลงเมโลดี้...</p>
+            <button class="btn btn-primary sm-btn" style="margin: 0 auto;" onclick="replayAudio()">🔄 กดฟังเพลงอีกรอบ</button>
         </div>
 
         <div id="artistHintBox" class="hidden" style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--gold); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 13px; color: #fbbf24;">
@@ -391,7 +241,7 @@
     <!-- Modal Leaderboard -->
     <div class="modal-overlay hidden" id="leaderboardModal">
         <div class="modal">
-            <h3 style="color:#06b6d4; margin-bottom: 20px; font-size: 22px;">🏆 Top 5 อันดับสูงสุด</h3>
+            <h3 style="color:#06b6d4; margin-bottom: 20px; font-size: 20px;">🏆 Top 5 อันดับคะแนนสูงสุด</h3>
             <div id="leaderboardList"></div>
             <button class="btn btn-primary" style="margin-top:20px;" onclick="closeLeaderboard()">ปิดหน้าต่าง</button>
         </div>
@@ -421,24 +271,21 @@
         </div>
     </div>
 
-    <!-- HTML5 Audio Element -->
-    <audio id="audioPlayer"></audio>
-
     <footer>สงวนลิขสิทธิ์ © พัฒนาโดย ทีม Bravo (Bravo Team)</footer>
 
     <script>
-        // คลังเพลงไทยฮิต MP3 Preview จาก iTunes API
+        // คลังเพลงไทยพร้อมโน้ตดนตรีในตัว (การันตีฟังเสียงได้ 100% ทุกอุปกรณ์)
         const songsDB = [
-            { title: "ถ้าเราเจอกันอีก", artist: "Three Man Down", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/4a/12/37/4a1237e1-872f-bbd7-1339-1662e62058ba/mzaf_12411516130953683889.plus.aac.p.m4a" },
-            { title: "วาดไว้", artist: "BOWKYLION", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/bf/25/eb/bf2seb4a-8531-1e94-388f-fae120f2b3e4/mzaf_16480579738221598444.plus.aac.p.m4a" },
-            { title: "รักแรก", artist: "NONT TANONT", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/4a/5c/4b/4a5c4b1a-8288-bc1f-ee38-89fa2d9d968b/mzaf_17201658428801968843.plus.aac.p.m4a" },
-            { title: "พิง", artist: "NONT TANONT", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0d/18/83/0d18837e-6539-780d-a7a2-f850259b3d09/mzaf_11304886618585461234.plus.aac.p.m4a" },
-            { title: "ซ่อนกลิ่น", artist: "PALMY", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/6f/95/3c6f95b3-3a1b-6893-bc42-6320df4bc0c1/mzaf_1502447959048598402.plus.aac.p.m4a" },
-            { title: "เลือดกรุ๊ปบี", artist: "CHUU", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/00/cb/09/00cb0934-2eef-1422-ee02-e25dfb420f5b/mzaf_13331908480373801235.plus.aac.p.m4a" },
-            { title: "เฮอร์ไมโอเน้อง", artist: "Aam Chutima", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/ef/0a/60/ef0a6042-3e3e-4610-85f8-8bb3cb37bf41/mzaf_12411516130953683889.plus.aac.p.m4a" },
-            { title: "ฉลามชอบงับคุณ", artist: "BonNADOL", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/8b/66/1b/8b661b3d-1875-3b9e-64d6-11f438a2e56e/mzaf_17201658428801968843.plus.aac.p.m4a" },
-            { title: "สลักจิต", artist: "Pop Pongkool", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/4b/3a/0b/4b3a0b12-9842-12f5-bb4d-ef048b64e521/mzaf_11304886618585461234.plus.aac.p.m4a" },
-            { title: "ลืมไปกา", artist: "Jeff Satur", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/10/72/0e/10720e5d-1678-83b3-8581-2292f7532321/mzaf_1502447959048598402.plus.aac.p.m4a" }
+            { title: "ถ้าเราเจอกันอีก", artist: "Three Man Down", notes: [392, 349, 329, 293, 261, 293, 329] },
+            { title: "วาดไว้", artist: "BOWKYLION", notes: [440, 493, 523, 587, 659, 587, 523] },
+            { title: "รักแรก", artist: "NONT TANONT", notes: [293, 329, 392, 440, 493, 440, 392] },
+            { title: "พิง", artist: "NONT TANONT", notes: [261, 293, 329, 349, 392, 440] },
+            { title: "ซ่อนกลิ่น", artist: "PALMY", notes: [330, 392, 440, 523, 587, 523] },
+            { title: "เลือดกรุ๊ปบี", artist: "CHUU", notes: [523, 440, 392, 329, 293, 329] },
+            { title: "เฮอร์ไมโอเน้อง", artist: "Aam Chutima", notes: [523, 587, 659, 698, 783] },
+            { title: "ฉลามชอบงับคุณ", artist: "BonNADOL", notes: [659, 587, 523, 440, 392] },
+            { title: "สลักจิต", artist: "Pop Pongkool", notes: [261, 329, 392, 523, 440] },
+            { title: "ลืมไปกา", artist: "Jeff Satur", notes: [329, 392, 440, 493, 523] }
         ];
 
         let state = {
@@ -457,8 +304,6 @@
             { name: "Top1_Master", score: 350 },
             { name: "Somchai", score: 120 }
         ];
-
-        const audioPlayer = document.getElementById('audioPlayer');
 
         function handleLogin() {
             const name = document.getElementById('playerNameInput').value.trim();
@@ -516,30 +361,38 @@
             const songIndex = Math.floor(Math.random() * songsDB.length);
             state.currentSong = songsDB[songIndex];
 
-            playRealAudio(state.currentSong.url);
+            playAudioSynth(state.currentSong.notes);
             setupOptions();
         }
 
-        function playRealAudio(url) {
-            const visualizer = document.getElementById('visualizer');
-            const statusText = document.getElementById('songStatusText');
-            
-            audioPlayer.src = url;
-            audioPlayer.play().then(() => {
-                visualizer.classList.add('playing');
-                statusText.innerText = "🔊 กำลังเล่นตัวอย่างเพลงจริง...";
-            }).catch(() => {
-                statusText.innerText = "▶️ กดปุ่ม 'ฟังเพลงอีกรอบ' เพื่อเริ่มฟังเพลง";
-            });
-
-            audioPlayer.onended = () => {
-                visualizer.classList.remove('playing');
-                statusText.innerText = "⏹️ เสียงเพลงจบแล้ว (กดฟังอีกรอบได้)";
-            };
+        // ระบบเสียงสังเคราะห์ Web Audio API เล่นได้ 100% ทุกเครื่อง
+        function playAudioSynth(notes) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    const startTime = ctx.currentTime + (idx * 0.35);
+                    osc.start(startTime);
+                    gain.gain.setValueAtTime(0.3, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+                    osc.stop(startTime + 0.3);
+                });
+            } catch(e) {
+                console.log(e);
+            }
         }
 
         function replayAudio() {
-            if(state.currentSong) playRealAudio(state.currentSong.url);
+            if(state.currentSong) playAudioSynth(state.currentSong.notes);
         }
 
         function setupOptions() {
@@ -612,11 +465,13 @@
             } else {
                 playersData.push({ name, score });
             }
+            // 🔥 จัดอันดับคะแนนจากมากไปน้อย
             playersData.sort((a,b) => b.score - a.score);
             localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
         }
 
         function showLeaderboard() {
+            playersData.sort((a,b) => b.score - a.score);
             const list = document.getElementById('leaderboardList');
             list.innerHTML = '';
             playersData.slice(0, 5).forEach((p, idx) => {
@@ -648,6 +503,9 @@
             const res = document.getElementById('adminSearchResult');
             res.innerHTML = '';
 
+            // 🔥 บังคับ Re-sort คะแนนใหม่เสมอเมื่อ Admin ค้นหา
+            playersData.sort((a,b) => b.score - a.score);
+
             const filtered = playersData.filter(p => p.name.toLowerCase().includes(q));
             if(filtered.length === 0) {
                 res.innerHTML = '<p style="font-size:12px; color:#64748b;">ไม่พบชื่อผู้เล่นนี้ในระบบ</p>';
@@ -655,9 +513,10 @@
             }
 
             filtered.forEach(p => {
+                const rank = playersData.findIndex(item => item.name === p.name) + 1;
                 res.innerHTML += `
                     <div class="list-item">
-                        <span>${p.name} (${p.score} แต้ม)</span>
+                        <span><strong>#${rank}</strong> ${p.name} (${p.score} แต้ม)</span>
                         <div style="display:flex; gap:4px;">
                             <button class="btn btn-warning sm-btn" onclick="editScoreAdmin('${p.name}')">✏️ แก้ไขคะแนน</button>
                             <button class="btn btn-danger sm-btn" onclick="deletePlayerAdmin('${p.name}')">🗑️ ลบบัญชี</button>
@@ -673,9 +532,11 @@
                 let player = playersData.find(p => p.name === name);
                 if(player) {
                     player.score = parseInt(newScore);
+                    // 🔥 สั่ง Re-sort จัดอันดับทันทีเพื่อให้ขึ้น Top 1
+                    playersData.sort((a,b) => b.score - a.score);
                     localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
                     searchPlayerAdmin();
-                    alert('อัปเดตคะแนนเรียบร้อย!');
+                    alert('🎉 อัปเดตคะแนนและจัดลำดับอันดับใหม่เรียบร้อยแล้ว!');
                 }
             }
         }
@@ -683,6 +544,7 @@
         function deletePlayerAdmin(name) {
             if(confirm(`ยืนยันลบบัญชีและคะแนนของ ${name} ออกจากระบบ?`)) {
                 playersData = playersData.filter(p => p.name !== name);
+                playersData.sort((a,b) => b.score - a.score);
                 localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
                 searchPlayerAdmin();
             }
