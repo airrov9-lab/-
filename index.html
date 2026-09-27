@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melody Master - เพลงฮิตติดหู (by ทีม Bravo)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
+        .card { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(10px); width: 100%; max-width: 500px; padding: 25px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); text-align: center; position: relative; overflow: hidden; }
+        .badge { background: linear-gradient(90deg, #f59e0b, #ef4444); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        .bravo-staff { background: linear-gradient(90deg, #8b5cf6, #ec4899); border: 1px solid #f43f5e; box-shadow: 0 0 10px rgba(236, 72, 153, 0.5); }
+        h1 { font-size: 26px; color: #38bdf8; margin-bottom: 5px; text-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+        p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 20px; }
+        
+        input, select, button { width: 100%; padding: 12px 15px; border-radius: 10px; border: none; margin-bottom: 12px; font-size: 15px; outline: none; }
+        input[type="text"], input[type="password"] { background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; color: #fff; }
+        input:focus { border-color: #38bdf8; }
+        
+        .btn { font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: linear-gradient(90deg, #38bdf8, #3b82f6); color: #fff; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-warning { background: linear-gradient(90deg, #f59e0b, #d97706); color: #fff; }
+        .btn-danger { background: #ef4444; color: #fff; }
+        .btn-admin { background: linear-gradient(90deg, #a855f7, #6366f1); color: #fff; margin-top: 5px; }
+
+        .hidden { display: none !important; }
+
+        /* Modal popup */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: #1e293b; border: 2px solid #a855f7; border-radius: 16px; padding: 20px; width: 90%; max-width: 400px; text-align: center; }
+
+        /* Game Screen */
+        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.5); padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; font-size: 14px; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 250px; overflow-y: auto; margin-bottom: 15px; }
+        .opt-btn { background: #334155; color: #fff; text-align: left; padding: 12px; border-radius: 8px; font-size: 14px; }
+        .opt-btn:hover { background: #475569; }
+
+        /* Audio Visualizer Effect */
+        .audio-box { background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
+        
+        /* Leaderboard & Admin */
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
+        .admin-controls { display: flex; gap: 5px; }
+        .sm-btn { padding: 4px 8px; font-size: 11px; margin: 0; width: auto; border-radius: 4px; }
+
+        footer { margin-top: 15px; font-size: 12px; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="loginCard">
+        <div class="badge">Melody Master</div>
+        <h1>เข้าสู่ระบบเล่นเกม</h1>
+        <p class="subtitle">ทายเพลงไทยฮิตยุคปัจจุบัน โดย ทีม Bravo</p>
+        
+        <input type="text" id="playerNameInput" placeholder="พิมพ์ชื่อผู้เล่นของคุณ..." autocomplete="off">
+        
+        <label style="font-size: 12px; color: #94a3b8; display: block; text-align: left; margin-bottom: 5px;">เลือกระดับความยาก:</label>
+        <select id="diffSelect">
+            <option value="easy">ง่าย (4 ตัวเลือก) - 10 คะแนน</option>
+            <option value="medium">ปานกลาง (6 ตัวเลือก) - 25 คะแนน</option>
+            <option value="hard">ยาก (8 ตัวเลือก) - 50 คะแนน</option>
+            <option value="extreme">นรก (10 ตัวเลือก) - 100 คะแนน</option>
+        </select>
+
+        <button class="btn btn-primary" onclick="handleLogin()">เริ่มเกมทันที 🎵</button>
+        <button class="btn btn-warning" style="margin-top:5px;" onclick="showLeaderboard()">🏆 ดูตารางคะแนน</button>
+    </div>
+
+    <!-- Modal Admin Auth -->
+    <div class="modal-overlay hidden" id="adminAuthModal">
+        <div class="modal">
+            <h3 style="color:#a855f7; margin-bottom: 10px;">👑 ยืนยันสิทธิ์ ทีมงาน Bravo</h3>
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 15px;">คุณคือทีมงานจริงหรอลองใส่รหัสสิ?</p>
+            <input type="password" id="adminPassInput" placeholder="กรอกรหัสผ่าน..." autocomplete="off">
+            <button class="btn btn-primary" onclick="verifyAdmin()">ยืนยันรหัสผ่าน</button>
+            <button class="btn btn-danger" style="background:#475569;" onclick="closeAdminModal()">ยกเลิก (เล่นชื่ออื่น)</button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div class="card hidden" id="gameCard">
+        <div class="game-header">
+            <div>👤 <span id="dispPlayer">Player</span> <span id="staffBadge" class="badge bravo-staff hidden">Bravo Staff</span></div>
+            <div>❤️ <span id="dispHearts">3</span> | 🪙 <span id="dispScore">0</span></div>
+        </div>
+
+        <div class="audio-box">
+            <p id="songStatus" style="font-size:13px; color:#38bdf8;">🔊 กำลังเล่นตัวอย่างเมโลดี้...</p>
+            <button class="btn btn-primary sm-btn" style="margin-top:8px; width:auto;" onclick="replayAudio()">🔄 ฟังอีกรอบ</button>
+        </div>
+
+        <div id="artistHintBox" class="hidden" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; color: #fbbf24;">
+            💡 ศิลปิน: <span id="dispArtist"></span>
+        </div>
+
+        <div class="options-grid" id="optionsContainer"></div>
+
+        <div style="display:flex; gap:8px;">
+            <button class="btn btn-warning" onclick="useHint()" id="hintBtn">💡 คำใบ้ (-20 แต้ม)</button>
+            <button class="btn btn-admin hidden" id="adminBtn" onclick="openAdminPanel()">🛠️ Admin Panel</button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div class="modal-overlay hidden" id="leaderboardModal">
+        <div class="modal" style="max-width: 450px;">
+            <h3 style="color:#38bdf8; margin-bottom: 15px;">🏆 ตารางคะแนนสูงสุด Top 5</h3>
+            <div id="leaderboardList"></div>
+            <button class="btn btn-primary" style="margin-top:15px;" onclick="closeLeaderboard()">ปิด</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay hidden" id="adminPanelModal">
+        <div class="modal" style="max-width: 480px; text-align: left;">
+            <h3 style="color:#a855f7; margin-bottom: 10px;">🛠️ แผงควบคุมแอดมิน (Bravo Console)</h3>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-size:12px; color:#cbd5e1;">🔍 ค้นหาชื่อผู้เล่น / จัดการคะแนน & ลบบัญชี:</label>
+                <input type="text" id="adminSearchInput" placeholder="พิมพ์ชื่อผู้เล่นที่ต้องการค้นหา..." onkeyup="searchPlayerAdmin()">
+                <div id="adminSearchResult" style="max-height: 150px; overflow-y: auto; margin-top: 5px;"></div>
+            </div>
+
+            <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 15px;">
+                <label style="font-size:12px; color:#cbd5e1;">⚡ สูตรโกง (God Mode):</label>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <button class="btn btn-warning sm-btn" onclick="toggleInfHearts()">💖 หัวใจอมตะ: <span id="infHeartStatus">OFF</span></button>
+                    <button class="btn btn-warning sm-btn" onclick="toggleInfHints()">💡 คำใบ้ฟรี: <span id="infHintStatus">OFF</span></button>
+                    <button class="btn btn-primary sm-btn" onclick="skipSong()">⏩ ข้ามข้อนี้</button>
+                </div>
+            </div>
+
+            <button class="btn btn-danger" onclick="closeAdminPanel()">ปิดแผงแอดมิน</button>
+        </div>
+    </div>
+
+    <footer>สงวนลิขสิทธิ์ © ทีม Bravo (Bravo Team)</footer>
+
+    <script>
+        // คลังเพลงไทยยอดฮิต
+        const songsDB = [
+            { title: "พิง", artist: "NONT TANONT", notes: [261, 293, 329, 349, 392] },
+            { title: "ถ้าเราเจอกันอีก", artist: "Three Man Down", notes: [392, 349, 329, 293, 261] },
+            { title: "วาดไว้", artist: "BOWKYLION", notes: [440, 493, 523, 587, 659] },
+            { title: "เฮอร์ไมโอเน้อง", artist: "A my", notes: [523, 587, 659, 698, 783] },
+            { title: "ซ่อนกลิ่น", artist: "PALMY", notes: [330, 392, 440, 523, 587] },
+            { title: "รักแรก", artist: "NONT TANONT", notes: [293, 329, 392, 440, 493] },
+            { title: "เลือดกรุ๊ปบี", artist: "Chuu", notes: [523, 440, 392, 329, 293] },
+            { title: "เก่งแต่เรื่องคนอื่น", artist: "INKEY", notes: [349, 392, 440, 523, 587] },
+            { title: "สลักจิต", artist: "Pop Pongkool ft. Da Endorphine", notes: [261, 329, 392, 523] },
+            { title: "เฮอร์มิต", artist: "BUS", notes: [440, 523, 587, 659, 783] },
+            { title: "ฉลามชอบงับคุณ", artist: "Bonniew", notes: [659, 587, 523, 440, 392] },
+            { title: "ลืมไปกา", artist: "Jeff Satur", notes: [329, 392, 440, 493, 523] }
+        ];
+
+        let state = {
+            playerName: '',
+            isAdmin: false,
+            score: 0,
+            hearts: 3,
+            difficulty: 'easy',
+            currentSong: null,
+            infHearts: false,
+            infHints: false
+        };
+
+        let playersData = JSON.parse(localStorage.getItem('bravo_melody_players')) || [
+            { name: "BravoAdmin", score: 500 },
+            { name: "TopPlayer1", score: 250 },
+            { name: "Somchai", score: 100 }
+        ];
+
+        function handleLogin() {
+            const name = document.getElementById('playerNameInput').value.trim();
+            if(!name) { alert('กรุณากรอกชื่อก่อนเล่นครับ!'); return; }
+            
+            if(name.toLowerCase() === 'bravo') {
+                document.getElementById('adminPassInput').value = '';
+                document.getElementById('adminAuthModal').classList.remove('hidden');
+            } else {
+                state.playerName = name;
+                state.isAdmin = false;
+                startGame();
+            }
+        }
+
+        function verifyAdmin() {
+            const pass = document.getElementById('adminPassInput').value;
+            if(pass === 'Bravo2') {
+                alert('🎉 ต้อนรับทีมงาน Bravo! ปลดล็อกสิทธิ์แอดมินเรียบร้อย');
+                state.playerName = "Bravo";
+                state.isAdmin = true;
+                document.getElementById('adminAuthModal').classList.add('hidden');
+                document.getElementById('staffBadge').classList.remove('hidden');
+                document.getElementById('adminBtn').classList.remove('hidden');
+                startGame();
+            } else {
+                alert('❌ รหัสผ่านไม่ถูกต้อง!');
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminAuthModal').classList.add('hidden');
+        }
+
+        function startGame() {
+            state.score = 0;
+            state.hearts = 3;
+            state.difficulty = document.getElementById('diffSelect').value;
+            
+            document.getElementById('loginCard').classList.add('hidden');
+            document.getElementById('gameCard').classList.remove('hidden');
+            document.getElementById('dispPlayer').innerText = state.playerName;
+            
+            updateStats();
+            nextQuestion();
+        }
+
+        function updateStats() {
+            document.getElementById('dispHearts').innerText = state.infHearts ? '∞' : state.hearts;
+            document.getElementById('dispScore').innerText = state.score;
+        }
+
+        function nextQuestion() {
+            document.getElementById('artistHintBox').classList.add('hidden');
+            const songIndex = Math.floor(Math.random() * songsDB.length);
+            state.currentSong = songsDB[songIndex];
+
+            playMelody(state.currentSong.notes);
+            setupOptions();
+        }
+
+        function playMelody(notes) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.frequency.value = freq;
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + idx * 0.4);
+                    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + idx * 0.4 + 0.35);
+                    osc.stop(ctx.currentTime + idx * 0.4 + 0.35);
+                });
+            } catch(e) {}
+        }
+
+        function replayAudio() {
+            if(state.currentSong) playMelody(state.currentSong.notes);
+        }
+
+        function setupOptions() {
+            const countMap = { easy: 4, medium: 6, hard: 8, extreme: 10 };
+            const optionCount = countMap[state.difficulty];
+            
+            let choices = [state.currentSong.title];
+            let allTitles = songsDB.map(s => s.title).filter(t => t !== state.currentSong.title);
+            allTitles.sort(() => 0.5 - Math.random());
+            
+            choices = choices.concat(allTitles.slice(0, optionCount - 1));
+            choices.sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            choices.forEach(title => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn btn';
+                btn.innerText = '🎵 ' + title;
+                btn.onclick = () => checkAnswer(title);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedTitle) {
+            const pointsMap = { easy: 10, medium: 25, hard: 50, extreme: 100 };
+            if(selectedTitle === state.currentSong.title) {
+                alert('✨ ถูกต้องแล้วครับ!');
+                state.score += pointsMap[state.difficulty];
+                updateStats();
+                nextQuestion();
+            } else {
+                if(!state.infHearts) state.hearts--;
+                updateStats();
+                if(state.hearts <= 0) {
+                    alert('💔 Game Over! คะแนนที่คุณทำได้: ' + state.score);
+                    saveScore(state.playerName, state.score);
+                    location.reload();
+                } else {
+                    alert('❌ ยังไม่ใช่ ลองฟังใหม่อีกทีนะ!');
+                }
+            }
+        }
+
+        function useHint() {
+            if(!state.infHints && state.score < 20) {
+                alert('คะแนนไม่พอใช้คำใบ้ (ต้องการ 20 แต้ม)');
+                return;
+            }
+            if(!state.infHints) state.score -= 20;
+            updateStats();
+
+            document.getElementById('dispArtist').innerText = state.currentSong.artist;
+            document.getElementById('artistHintBox').classList.remove('hidden');
+
+            // ตัดตัวเลือกผิดออก 2 ข้อ
+            const buttons = document.querySelectorAll('.opt-btn');
+            let removed = 0;
+            buttons.forEach(btn => {
+                if(!btn.innerText.includes(state.currentSong.title) && removed < 2) {
+                    btn.style.display = 'none';
+                    removed++;
+                }
+            });
+        }
+
+        function saveScore(name, score) {
+            let existing = playersData.find(p => p.name === name);
+            if(existing) {
+                if(score > existing.score) existing.score = score;
+            } else {
+                playersData.push({ name, score });
+            }
+            playersData.sort((a,b) => b.score - a.score);
+            localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
+        }
+
+        function showLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '';
+            playersData.slice(0, 5).forEach((p, idx) => {
+                list.innerHTML += `<div class="list-item"><span>#${idx+1} ${p.name}</span><strong>${p.score} แต้ม</strong></div>`;
+            });
+            document.getElementById('leaderboardModal').classList.remove('hidden');
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('leaderboardModal').classList.add('hidden');
+        }
+
+        // Admin Panel Functions
+        function openAdminPanel() {
+            document.getElementById('adminPanelModal').classList.remove('hidden');
+            searchPlayerAdmin();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanelModal').classList.add('hidden');
+        }
+
+        function searchPlayerAdmin() {
+            const q = document.getElementById('adminSearchInput').value.toLowerCase();
+            const res = document.getElementById('adminSearchResult');
+            res.innerHTML = '';
+
+            const filtered = playersData.filter(p => p.name.toLowerCase().includes(q));
+            if(filtered.length === 0) {
+                res.innerHTML = '<p style="font-size:12px; color:#64748b;">ไม่พบชื่อผู้เล่นนี้</p>';
+                return;
+            }
+
+            filtered.forEach(p => {
+                res.innerHTML += `
+                    <div class="list-item">
+                        <span>${p.name} (${p.score} แต้ม)</span>
+                        <div class="admin-controls">
+                            <button class="btn btn-warning sm-btn" onclick="editScoreAdmin('${p.name}')">✏️ แก้คะแนน</button>
+                            <button class="btn btn-danger sm-btn" onclick="deletePlayerAdmin('${p.name}')">🗑️ ลบ</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editScoreAdmin(name) {
+            const newScore = prompt(`กรอกคะแนนใหม่สำหรับ ${name}:`);
+            if(newScore !== null && !isNaN(newScore)) {
+                let player = playersData.find(p => p.name === name);
+                if(player) {
+                    player.score = parseInt(newScore);
+                    localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
+                    searchPlayerAdmin();
+                    alert('อัปเดตคะแนนเรียบร้อย!');
+                }
+            }
+        }
+
+        function deletePlayerAdmin(name) {
+            if(confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบบัญชี/คะแนนของ ${name}?`)) {
+                playersData = playersData.filter(p => p.name !== name);
+                localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
+                searchPlayerAdmin();
+            }
+        }
+
+        function toggleInfHearts() {
+            state.infHearts = !state.infHearts;
+            document.getElementById('infHeartStatus').innerText = state.infHearts ? 'ON' : 'OFF';
+            updateStats();
+        }
+
+        function toggleInfHints() {
+            state.infHints = !state.infHints;
+            document.getElementById('infHintStatus').innerText = state.infHints ? 'ON' : 'OFF';
+        }
+
+        function skipSong() {
+            alert('⏩ ข้ามข้อนี้โดยแอดมิน!');
+            nextQuestion();
+        }
+    </script>
+</body>
+</html>
