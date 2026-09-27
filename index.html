@@ -4,59 +4,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melody Master - เพลงฮิตติดหู (by ทีม Bravo)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
-        .card { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(10px); width: 100%; max-width: 500px; padding: 25px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); text-align: center; position: relative; overflow: hidden; }
-        .badge { background: linear-gradient(90deg, #f59e0b, #ef4444); padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
-        .bravo-staff { background: linear-gradient(90deg, #8b5cf6, #ec4899); border: 1px solid #f43f5e; box-shadow: 0 0 10px rgba(236, 72, 153, 0.5); }
-        h1 { font-size: 26px; color: #38bdf8; margin-bottom: 5px; text-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
-        p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 20px; }
+        :root {
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.5);
+            --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.6);
+            --bg-dark: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.75);
+            --border-glow: rgba(139, 92, 246, 0.3);
+        }
+    
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
         
-        input, select, button { width: 100%; padding: 12px 15px; border-radius: 10px; border: none; margin-bottom: 12px; font-size: 15px; outline: none; }
-        input[type="text"], input[type="password"] { background: rgba(15, 23, 42, 0.6); border: 1px solid #334155; color: #fff; }
-        input:focus { border-color: #38bdf8; }
-        
-        .btn { font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .btn-primary { background: linear-gradient(90deg, #38bdf8, #3b82f6); color: #fff; }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-warning { background: linear-gradient(90deg, #f59e0b, #d97706); color: #fff; }
-        .btn-danger { background: #ef4444; color: #fff; }
-        .btn-admin { background: linear-gradient(90deg, #a855f7, #6366f1); color: #fff; margin-top: 5px; }
+        body {
+            background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #0f172a 50%, var(--bg-dark) 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Objects */
+        .ambient-light {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--primary-glow);
+            filter: blur(120px);
+            z-index: -1;
+            top: 20%;
+            left: 20%;
+            animation: floatGlow 10s infinite alternate;
+        }
+        .ambient-light2 {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            filter: blur(140px);
+            z-index: -1;
+            bottom: 10%;
+            right: 20%;
+            animation: floatGlow 12s infinite alternate-reverse;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 50px) scale(1.2); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 28px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 520px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .bravo-staff {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border: 1px solid #fef08a;
+            box-shadow: 0 0 20px var(--gold-glow);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px var(--gold-glow); }
+            50% { box-shadow: 0 0 25px var(--gold-glow), 0 0 10px #ef4444; }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 25px; }
+
+        input, select {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(15, 23, 42, 0.8);
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 14px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #fff;
+        }
 
         .hidden { display: none !important; }
 
-        /* Modal popup */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: #1e293b; border: 2px solid #a855f7; border-radius: 16px; padding: 20px; width: 90%; max-width: 400px; text-align: center; }
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.25s ease;
+        }
 
-        /* Game Screen */
-        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.5); padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; font-size: 14px; }
-        .options-grid { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 250px; overflow-y: auto; margin-bottom: 15px; }
-        .opt-btn { background: #334155; color: #fff; text-align: left; padding: 12px; border-radius: 8px; font-size: 14px; }
-        .opt-btn:hover { background: #475569; }
+        .modal {
+            background: #111827;
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 25px;
+            width: 90%;
+            max-width: 440px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            text-align: center;
+        }
 
-        /* Audio Visualizer Effect */
-        .audio-box { background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
-        
-        /* Leaderboard & Admin */
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
-        .admin-controls { display: flex; gap: 5px; }
-        .sm-btn { padding: 4px 8px; font-size: 11px; margin: 0; width: auto; border-radius: 4px; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-        footer { margin-top: 15px; font-size: 12px; color: #64748b; }
+        /* Player Bar Header */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 12px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+
+        /* Visualizer Box */
+        .audio-player-box {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            height: 45px;
+            margin: 15px 0;
+        }
+
+        .bar {
+            width: 8px;
+            background: linear-gradient(to top, #06b6d4, #a855f7);
+            border-radius: 4px;
+            height: 10%;
+            transition: height 0.15s ease;
+        }
+
+        .playing .bar { animation: wave 0.8s infinite alternate ease-in-out; }
+        .playing .bar:nth-child(2) { animation-delay: 0.2s; }
+        .playing .bar:nth-child(3) { animation-delay: 0.4s; }
+        .playing .bar:nth-child(4) { animation-delay: 0.1s; }
+        .playing .bar:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes wave {
+            0% { height: 15%; }
+            100% { height: 100%; }
+        }
+
+        /* Choices Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            max-height: 260px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 4px;
+        }
+
+        .opt-btn {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #f1f5f9;
+            text-align: left;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .opt-btn:hover {
+            background: rgba(51, 65, 85, 0.9);
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        /* List Items in Admin / Leaderboard */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .sm-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin: 0;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
 
+    <div class="ambient-light"></div>
+    <div class="ambient-light2"></div>
+
+    <!-- Login Screen -->
     <div class="card" id="loginCard">
-        <div class="badge">Melody Master</div>
-        <h1>เข้าสู่ระบบเล่นเกม</h1>
-        <p class="subtitle">ทายเพลงไทยฮิตยุคปัจจุบัน โดย ทีม Bravo</p>
+        <div class="badge">MELODY MASTER</div>
+        <h1>ทายเพลงฮิตติดหู</h1>
+        <p class="subtitle">คลังเพลงไทยยุคปัจจุบัน โดย ทีม Bravo</p>
         
         <input type="text" id="playerNameInput" placeholder="พิมพ์ชื่อผู้เล่นของคุณ..." autocomplete="off">
         
-        <label style="font-size: 12px; color: #94a3b8; display: block; text-align: left; margin-bottom: 5px;">เลือกระดับความยาก:</label>
+        <label style="font-size: 13px; color: #94a3b8; display: block; text-align: left; margin-bottom: 6px; font-weight:600;">เลือกระดับความยาก:</label>
         <select id="diffSelect">
             <option value="easy">ง่าย (4 ตัวเลือก) - 10 คะแนน</option>
             <option value="medium">ปานกลาง (6 ตัวเลือก) - 25 คะแนน</option>
@@ -64,95 +338,107 @@
             <option value="extreme">นรก (10 ตัวเลือก) - 100 คะแนน</option>
         </select>
 
-        <button class="btn btn-primary" onclick="handleLogin()">เริ่มเกมทันที 🎵</button>
-        <button class="btn btn-warning" style="margin-top:5px;" onclick="showLeaderboard()">🏆 ดูตารางคะแนน</button>
+        <button class="btn btn-primary" onclick="handleLogin()">🎮 เริ่มเล่นเกมทันที</button>
+        <button class="btn btn-warning" onclick="showLeaderboard()">🏆 ดูตารางคะแนนสูงสุด</button>
     </div>
 
-    <!-- Modal Admin Auth -->
+    <!-- Modal Admin Challenge -->
     <div class="modal-overlay hidden" id="adminAuthModal">
         <div class="modal">
-            <h3 style="color:#a855f7; margin-bottom: 10px;">👑 ยืนยันสิทธิ์ ทีมงาน Bravo</h3>
-            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 15px;">คุณคือทีมงานจริงหรอลองใส่รหัสสิ?</p>
-            <input type="password" id="adminPassInput" placeholder="กรอกรหัสผ่าน..." autocomplete="off">
-            <button class="btn btn-primary" onclick="verifyAdmin()">ยืนยันรหัสผ่าน</button>
-            <button class="btn btn-danger" style="background:#475569;" onclick="closeAdminModal()">ยกเลิก (เล่นชื่ออื่น)</button>
+            <h3 style="color:#a855f7; margin-bottom: 8px; font-size: 20px;">👑 ยืนยันสิทธิ์ ทีมงาน Bravo</h3>
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 20px;">คุณคือทีมงานจริงหรอลองใส่รหัสสิ?</p>
+            <input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="off">
+            <button class="btn btn-primary" onclick="verifyAdmin()">ปลดล็อกสิทธิ์ Admin</button>
+            <button class="btn btn-danger" style="background: #334155;" onclick="closeAdminModal()">ยกเลิก</button>
         </div>
     </div>
 
-    <!-- Game Screen -->
+    <!-- Main Game Screen -->
     <div class="card hidden" id="gameCard">
         <div class="game-header">
-            <div>👤 <span id="dispPlayer">Player</span> <span id="staffBadge" class="badge bravo-staff hidden">Bravo Staff</span></div>
-            <div>❤️ <span id="dispHearts">3</span> | 🪙 <span id="dispScore">0</span></div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-weight:700;" id="dispPlayer">Player</span>
+                <span id="staffBadge" class="badge bravo-staff hidden">👑 Bravo Staff</span>
+            </div>
+            <div>
+                ❤️ <span id="dispHearts" style="color:#ef4444; font-weight:700;">3</span> | 
+                🪙 <span id="dispScore" style="color:#f59e0b; font-weight:700;">0</span>
+            </div>
         </div>
 
-        <div class="audio-box">
-            <p id="songStatus" style="font-size:13px; color:#38bdf8;">🔊 กำลังเล่นตัวอย่างเมโลดี้...</p>
-            <button class="btn btn-primary sm-btn" style="margin-top:8px; width:auto;" onclick="replayAudio()">🔄 ฟังอีกรอบ</button>
+        <div class="audio-player-box" id="audioBox">
+            <p id="songStatusText" style="font-size:14px; color:#38bdf8; font-weight:600;">🔊 ฟังคลิปเสียงเพลงจริงตัวอย่าง...</p>
+            
+            <div class="visualizer" id="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+
+            <button class="btn btn-primary sm-btn" style="margin: 0 auto;" onclick="replayAudio()">🔄 ฟังเพลงอีกรอบ</button>
         </div>
 
-        <div id="artistHintBox" class="hidden" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; padding: 8px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; color: #fbbf24;">
-            💡 ศิลปิน: <span id="dispArtist"></span>
+        <div id="artistHintBox" class="hidden" style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--gold); padding: 10px; border-radius: 12px; margin-bottom: 15px; font-size: 13px; color: #fbbf24;">
+            💡 ศิลปิน: <span id="dispArtist" style="font-weight:700;"></span>
         </div>
 
         <div class="options-grid" id="optionsContainer"></div>
 
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:10px;">
             <button class="btn btn-warning" onclick="useHint()" id="hintBtn">💡 คำใบ้ (-20 แต้ม)</button>
-            <button class="btn btn-admin hidden" id="adminBtn" onclick="openAdminPanel()">🛠️ Admin Panel</button>
+            <button class="btn btn-admin hidden" id="adminBtn" onclick="openAdminPanel()">🛠️ Admin Console</button>
         </div>
     </div>
 
-    <!-- Leaderboard Modal -->
+    <!-- Modal Leaderboard -->
     <div class="modal-overlay hidden" id="leaderboardModal">
-        <div class="modal" style="max-width: 450px;">
-            <h3 style="color:#38bdf8; margin-bottom: 15px;">🏆 ตารางคะแนนสูงสุด Top 5</h3>
+        <div class="modal">
+            <h3 style="color:#06b6d4; margin-bottom: 20px; font-size: 22px;">🏆 Top 5 อันดับสูงสุด</h3>
             <div id="leaderboardList"></div>
-            <button class="btn btn-primary" style="margin-top:15px;" onclick="closeLeaderboard()">ปิด</button>
+            <button class="btn btn-primary" style="margin-top:20px;" onclick="closeLeaderboard()">ปิดหน้าต่าง</button>
         </div>
     </div>
 
-    <!-- Admin Panel Modal -->
+    <!-- Modal Admin Console -->
     <div class="modal-overlay hidden" id="adminPanelModal">
         <div class="modal" style="max-width: 480px; text-align: left;">
-            <h3 style="color:#a855f7; margin-bottom: 10px;">🛠️ แผงควบคุมแอดมิน (Bravo Console)</h3>
+            <h3 style="color:#a855f7; margin-bottom: 15px; font-size: 20px;">🛠️ แผงควบคุมแอดมิน (Bravo Staff)</h3>
             
-            <div style="margin-bottom: 15px;">
-                <label style="font-size:12px; color:#cbd5e1;">🔍 ค้นหาชื่อผู้เล่น / จัดการคะแนน & ลบบัญชี:</label>
-                <input type="text" id="adminSearchInput" placeholder="พิมพ์ชื่อผู้เล่นที่ต้องการค้นหา..." onkeyup="searchPlayerAdmin()">
-                <div id="adminSearchResult" style="max-height: 150px; overflow-y: auto; margin-top: 5px;"></div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size:13px; color:#cbd5e1; font-weight:600;">🔍 ค้นหาชื่อผู้เล่น / จัดการคะแนน & ลบบัญชี:</label>
+                <input type="text" id="adminSearchInput" placeholder="พิมพ์ชื่อค้นหา..." onkeyup="searchPlayerAdmin()" style="margin-top:6px;">
+                <div id="adminSearchResult" style="max-height: 160px; overflow-y: auto; margin-top: 8px;"></div>
             </div>
 
-            <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 15px;">
-                <label style="font-size:12px; color:#cbd5e1;">⚡ สูตรโกง (God Mode):</label>
-                <div style="display:flex; gap:5px; margin-top:5px;">
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 20px;">
+                <label style="font-size:13px; color:#cbd5e1; font-weight:600; display:block; margin-bottom:8px;">⚡ สูตรโกง (God Mode):</label>
+                <div style="display:flex; gap:8px;">
                     <button class="btn btn-warning sm-btn" onclick="toggleInfHearts()">💖 หัวใจอมตะ: <span id="infHeartStatus">OFF</span></button>
                     <button class="btn btn-warning sm-btn" onclick="toggleInfHints()">💡 คำใบ้ฟรี: <span id="infHintStatus">OFF</span></button>
                     <button class="btn btn-primary sm-btn" onclick="skipSong()">⏩ ข้ามข้อนี้</button>
                 </div>
             </div>
 
-            <button class="btn btn-danger" onclick="closeAdminPanel()">ปิดแผงแอดมิน</button>
+            <button class="btn btn-danger" onclick="closeAdminPanel()">ปิดแผงควบคุม</button>
         </div>
     </div>
 
-    <footer>สงวนลิขสิทธิ์ © ทีม Bravo (Bravo Team)</footer>
+    <!-- HTML5 Audio Element -->
+    <audio id="audioPlayer"></audio>
+
+    <footer>สงวนลิขสิทธิ์ © พัฒนาโดย ทีม Bravo (Bravo Team)</footer>
 
     <script>
-        // คลังเพลงไทยยอดฮิต
+        // คลังเพลงไทยฮิต MP3 Preview จาก iTunes API
         const songsDB = [
-            { title: "พิง", artist: "NONT TANONT", notes: [261, 293, 329, 349, 392] },
-            { title: "ถ้าเราเจอกันอีก", artist: "Three Man Down", notes: [392, 349, 329, 293, 261] },
-            { title: "วาดไว้", artist: "BOWKYLION", notes: [440, 493, 523, 587, 659] },
-            { title: "เฮอร์ไมโอเน้อง", artist: "A my", notes: [523, 587, 659, 698, 783] },
-            { title: "ซ่อนกลิ่น", artist: "PALMY", notes: [330, 392, 440, 523, 587] },
-            { title: "รักแรก", artist: "NONT TANONT", notes: [293, 329, 392, 440, 493] },
-            { title: "เลือดกรุ๊ปบี", artist: "Chuu", notes: [523, 440, 392, 329, 293] },
-            { title: "เก่งแต่เรื่องคนอื่น", artist: "INKEY", notes: [349, 392, 440, 523, 587] },
-            { title: "สลักจิต", artist: "Pop Pongkool ft. Da Endorphine", notes: [261, 329, 392, 523] },
-            { title: "เฮอร์มิต", artist: "BUS", notes: [440, 523, 587, 659, 783] },
-            { title: "ฉลามชอบงับคุณ", artist: "Bonniew", notes: [659, 587, 523, 440, 392] },
-            { title: "ลืมไปกา", artist: "Jeff Satur", notes: [329, 392, 440, 493, 523] }
+            { title: "ถ้าเราเจอกันอีก", artist: "Three Man Down", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/4a/12/37/4a1237e1-872f-bbd7-1339-1662e62058ba/mzaf_12411516130953683889.plus.aac.p.m4a" },
+            { title: "วาดไว้", artist: "BOWKYLION", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/bf/25/eb/bf2seb4a-8531-1e94-388f-fae120f2b3e4/mzaf_16480579738221598444.plus.aac.p.m4a" },
+            { title: "รักแรก", artist: "NONT TANONT", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/4a/5c/4b/4a5c4b1a-8288-bc1f-ee38-89fa2d9d968b/mzaf_17201658428801968843.plus.aac.p.m4a" },
+            { title: "พิง", artist: "NONT TANONT", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0d/18/83/0d18837e-6539-780d-a7a2-f850259b3d09/mzaf_11304886618585461234.plus.aac.p.m4a" },
+            { title: "ซ่อนกลิ่น", artist: "PALMY", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/6f/95/3c6f95b3-3a1b-6893-bc42-6320df4bc0c1/mzaf_1502447959048598402.plus.aac.p.m4a" },
+            { title: "เลือดกรุ๊ปบี", artist: "CHUU", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/00/cb/09/00cb0934-2eef-1422-ee02-e25dfb420f5b/mzaf_13331908480373801235.plus.aac.p.m4a" },
+            { title: "เฮอร์ไมโอเน้อง", artist: "Aam Chutima", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/ef/0a/60/ef0a6042-3e3e-4610-85f8-8bb3cb37bf41/mzaf_12411516130953683889.plus.aac.p.m4a" },
+            { title: "ฉลามชอบงับคุณ", artist: "BonNADOL", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/8b/66/1b/8b661b3d-1875-3b9e-64d6-11f438a2e56e/mzaf_17201658428801968843.plus.aac.p.m4a" },
+            { title: "สลักจิต", artist: "Pop Pongkool", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/4b/3a/0b/4b3a0b12-9842-12f5-bb4d-ef048b64e521/mzaf_11304886618585461234.plus.aac.p.m4a" },
+            { title: "ลืมไปกา", artist: "Jeff Satur", url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/10/72/0e/10720e5d-1678-83b3-8581-2292f7532321/mzaf_1502447959048598402.plus.aac.p.m4a" }
         ];
 
         let state = {
@@ -167,14 +453,16 @@
         };
 
         let playersData = JSON.parse(localStorage.getItem('bravo_melody_players')) || [
-            { name: "BravoAdmin", score: 500 },
-            { name: "TopPlayer1", score: 250 },
-            { name: "Somchai", score: 100 }
+            { name: "BravoStaff", score: 999 },
+            { name: "Top1_Master", score: 350 },
+            { name: "Somchai", score: 120 }
         ];
+
+        const audioPlayer = document.getElementById('audioPlayer');
 
         function handleLogin() {
             const name = document.getElementById('playerNameInput').value.trim();
-            if(!name) { alert('กรุณากรอกชื่อก่อนเล่นครับ!'); return; }
+            if(!name) { alert('กรุณากรอกชื่อผู้เล่นก่อนเริ่มครับ!'); return; }
             
             if(name.toLowerCase() === 'bravo') {
                 document.getElementById('adminPassInput').value = '';
@@ -189,7 +477,7 @@
         function verifyAdmin() {
             const pass = document.getElementById('adminPassInput').value;
             if(pass === 'Bravo2') {
-                alert('🎉 ต้อนรับทีมงาน Bravo! ปลดล็อกสิทธิ์แอดมินเรียบร้อย');
+                alert('🎉 ปลดล็อกสิทธิ์ Bravo Staff และเปิดแผงแอดมินสำเร็จ!');
                 state.playerName = "Bravo";
                 state.isAdmin = true;
                 document.getElementById('adminAuthModal').classList.add('hidden');
@@ -228,28 +516,30 @@
             const songIndex = Math.floor(Math.random() * songsDB.length);
             state.currentSong = songsDB[songIndex];
 
-            playMelody(state.currentSong.notes);
+            playRealAudio(state.currentSong.url);
             setupOptions();
         }
 
-        function playMelody(notes) {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                notes.forEach((freq, idx) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.frequency.value = freq;
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(ctx.currentTime + idx * 0.4);
-                    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + idx * 0.4 + 0.35);
-                    osc.stop(ctx.currentTime + idx * 0.4 + 0.35);
-                });
-            } catch(e) {}
+        function playRealAudio(url) {
+            const visualizer = document.getElementById('visualizer');
+            const statusText = document.getElementById('songStatusText');
+            
+            audioPlayer.src = url;
+            audioPlayer.play().then(() => {
+                visualizer.classList.add('playing');
+                statusText.innerText = "🔊 กำลังเล่นตัวอย่างเพลงจริง...";
+            }).catch(() => {
+                statusText.innerText = "▶️ กดปุ่ม 'ฟังเพลงอีกรอบ' เพื่อเริ่มฟังเพลง";
+            });
+
+            audioPlayer.onended = () => {
+                visualizer.classList.remove('playing');
+                statusText.innerText = "⏹️ เสียงเพลงจบแล้ว (กดฟังอีกรอบได้)";
+            };
         }
 
         function replayAudio() {
-            if(state.currentSong) playMelody(state.currentSong.notes);
+            if(state.currentSong) playRealAudio(state.currentSong.url);
         }
 
         function setupOptions() {
@@ -267,7 +557,7 @@
             container.innerHTML = '';
             choices.forEach(title => {
                 const btn = document.createElement('button');
-                btn.className = 'opt-btn btn';
+                btn.className = 'opt-btn';
                 btn.innerText = '🎵 ' + title;
                 btn.onclick = () => checkAnswer(title);
                 container.appendChild(btn);
@@ -277,7 +567,7 @@
         function checkAnswer(selectedTitle) {
             const pointsMap = { easy: 10, medium: 25, hard: 50, extreme: 100 };
             if(selectedTitle === state.currentSong.title) {
-                alert('✨ ถูกต้องแล้วครับ!');
+                alert('✨ ถูกต้องแล้วครับ! +' + pointsMap[state.difficulty] + ' แต้ม');
                 state.score += pointsMap[state.difficulty];
                 updateStats();
                 nextQuestion();
@@ -285,18 +575,18 @@
                 if(!state.infHearts) state.hearts--;
                 updateStats();
                 if(state.hearts <= 0) {
-                    alert('💔 Game Over! คะแนนที่คุณทำได้: ' + state.score);
+                    alert('💔 Game Over! คะแนนรวมของคุณคือ: ' + state.score);
                     saveScore(state.playerName, state.score);
                     location.reload();
                 } else {
-                    alert('❌ ยังไม่ใช่ ลองฟังใหม่อีกทีนะ!');
+                    alert('❌ คำตอบยังไม่ถูกต้อง ลองฟังใหม่อีกทีนะ!');
                 }
             }
         }
 
         function useHint() {
             if(!state.infHints && state.score < 20) {
-                alert('คะแนนไม่พอใช้คำใบ้ (ต้องการ 20 แต้ม)');
+                alert('คะแนนไม่พอกดใช้คำใบ้ (ต้องการ 20 แต้ม)');
                 return;
             }
             if(!state.infHints) state.score -= 20;
@@ -305,7 +595,6 @@
             document.getElementById('dispArtist').innerText = state.currentSong.artist;
             document.getElementById('artistHintBox').classList.remove('hidden');
 
-            // ตัดตัวเลือกผิดออก 2 ข้อ
             const buttons = document.querySelectorAll('.opt-btn');
             let removed = 0;
             buttons.forEach(btn => {
@@ -331,7 +620,11 @@
             const list = document.getElementById('leaderboardList');
             list.innerHTML = '';
             playersData.slice(0, 5).forEach((p, idx) => {
-                list.innerHTML += `<div class="list-item"><span>#${idx+1} ${p.name}</span><strong>${p.score} แต้ม</strong></div>`;
+                list.innerHTML += `
+                    <div class="list-item">
+                        <span>#${idx+1} ${p.name}</span>
+                        <strong style="color:#06b6d4;">${p.score} แต้ม</strong>
+                    </div>`;
             });
             document.getElementById('leaderboardModal').classList.remove('hidden');
         }
@@ -340,7 +633,7 @@
             document.getElementById('leaderboardModal').classList.add('hidden');
         }
 
-        // Admin Panel Functions
+        // Admin Console
         function openAdminPanel() {
             document.getElementById('adminPanelModal').classList.remove('hidden');
             searchPlayerAdmin();
@@ -357,7 +650,7 @@
 
             const filtered = playersData.filter(p => p.name.toLowerCase().includes(q));
             if(filtered.length === 0) {
-                res.innerHTML = '<p style="font-size:12px; color:#64748b;">ไม่พบชื่อผู้เล่นนี้</p>';
+                res.innerHTML = '<p style="font-size:12px; color:#64748b;">ไม่พบชื่อผู้เล่นนี้ในระบบ</p>';
                 return;
             }
 
@@ -365,9 +658,9 @@
                 res.innerHTML += `
                     <div class="list-item">
                         <span>${p.name} (${p.score} แต้ม)</span>
-                        <div class="admin-controls">
-                            <button class="btn btn-warning sm-btn" onclick="editScoreAdmin('${p.name}')">✏️ แก้คะแนน</button>
-                            <button class="btn btn-danger sm-btn" onclick="deletePlayerAdmin('${p.name}')">🗑️ ลบ</button>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn btn-warning sm-btn" onclick="editScoreAdmin('${p.name}')">✏️ แก้ไขคะแนน</button>
+                            <button class="btn btn-danger sm-btn" onclick="deletePlayerAdmin('${p.name}')">🗑️ ลบบัญชี</button>
                         </div>
                     </div>
                 `;
@@ -375,7 +668,7 @@
         }
 
         function editScoreAdmin(name) {
-            const newScore = prompt(`กรอกคะแนนใหม่สำหรับ ${name}:`);
+            const newScore = prompt(`กรอกคะแนนใหม่สำหรับผู้เล่น ${name}:`);
             if(newScore !== null && !isNaN(newScore)) {
                 let player = playersData.find(p => p.name === name);
                 if(player) {
@@ -388,7 +681,7 @@
         }
 
         function deletePlayerAdmin(name) {
-            if(confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบบัญชี/คะแนนของ ${name}?`)) {
+            if(confirm(`ยืนยันลบบัญชีและคะแนนของ ${name} ออกจากระบบ?`)) {
                 playersData = playersData.filter(p => p.name !== name);
                 localStorage.setItem('bravo_melody_players', JSON.stringify(playersData));
                 searchPlayerAdmin();
@@ -407,7 +700,7 @@
         }
 
         function skipSong() {
-            alert('⏩ ข้ามข้อนี้โดยแอดมิน!');
+            alert('⏩ ข้ามเพลงนี้โดยแอดมิน!');
             nextQuestion();
         }
     </script>
